@@ -1,0 +1,12 @@
+# Environment secrets — never commit these
+.env
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+
+# Scan data (potentially large)
+data/

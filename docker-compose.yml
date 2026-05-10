@@ -1,0 +1,93 @@
+version: "3.9"
+
+networks:
+  pentest_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
+services:
+
+  backend:
+    build: ./Backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./reports:/app/reports
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - pentest_net
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://pentest_user:strongpassword@db:5432/pentest_db
+      - GEMINI_API_KEY=AIzaSyCOFOX5Yrancch1QWEL3BSlyHTE5ktiqoA
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: pentest_db
+      POSTGRES_USER: pentest_user
+      POSTGRES_PASSWORD: strongpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pentest_net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pentest.local
+      PGADMIN_DEFAULT_PASSWORD: Admin123
+    ports:
+      - "5050:80"
+    networks:
+      - pentest_net
+    depends_on:
+      - db
+
+  dvwa:
+    image: vulnerables/web-dvwa
+    ports:
+      - "8080:80"
+    networks:
+      - pentest_net
+
+  nmap:
+    build: ./Dockerfiles/nmap
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      - pentest_net
+
+  sqlmap:
+    build: ./Dockerfiles/sqlmap
+    networks:
+      - pentest_net
+
+  nikto:
+    build: ./Dockerfiles/nikto
+    networks:
+      - pentest_net
+
+  wfuzz:
+    build: ./Dockerfiles/wfuzz
+    networks:
+      - pentest_net
+
+  harvester:
+    build: ./Dockerfiles/harvester
+    networks:
+      - pentest_net
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - pentest_net

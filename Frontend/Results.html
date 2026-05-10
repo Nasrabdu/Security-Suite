@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Scan Results - Security Suite</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script src="js/auth-helper.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = checkAuth();
+            if (user) displayUserInfo(user);
+        });
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .json-block {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#007BFF", "background-dark": "#121212", "surface-dark": "#1A202C", "text-dark": "#e0e0e0", "text-muted-dark": "#9ca3af" },
+                    fontFamily: { "display": ["Inter", "sans-serif"], "mono": ["JetBrains Mono", "monospace"] },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="font-display bg-background-dark text-text-dark min-h-screen">
+    <!-- Header -->
+    <header class="bg-surface-dark border-b border-white/10 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <button onclick="goToDashboard()"
+                    class="flex items-center gap-2 px-4 py-2 hover:bg-white/5 rounded-lg transition-colors text-text-muted-dark hover:text-text-dark">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span>Dashboard</span>
+                </button>
+                <div class="h-6 w-px bg-white/10"></div>
+                <h1 class="text-xl font-bold">Scan Results</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="userNameDisplay" class="text-sm text-text-muted-dark font-medium"></span>
+                <button onclick="logout()"
+                    class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors text-sm font-medium">
+                    <span class="material-symbols-outlined text-base">logout</span>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 max-w-[1200px]">
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-20">
+            <span class="material-symbols-outlined text-6xl text-primary animate-spin">sync</span>
+            <p class="mt-4 text-xl">Loading analysis results...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden text-center py-20">
+            <span class="material-symbols-outlined text-6xl text-red-500">error</span>
+            <h2 class="text-2xl font-bold mt-4">Failed to load results</h2>
+            <p id="errorMessage" class="text-text-muted-dark mt-2"></p>
+            <button onclick="goToDashboard()"
+                class="mt-6 px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">Return to
+                Dashboard</button>
+        </div>
+
+        <!-- Content (Hidden initially) -->
+        <div id="resultsContent" class="hidden space-y-8">
+
+            <!-- Header Card -->
+            <div
+                class="bg-surface-dark border border-white/10 rounded-xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span id="statusBadge"
+                            class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-gray-500/10 text-gray-400">LOADING</span>
+                        <h2 id="targetUrl" class="text-2xl font-black tracking-tight">target.com</h2>
+                    </div>
+                    <p class="text-text-muted-dark flex items-center gap-4 text-sm">
+                        <span id="scanDate">Jan 01, 2026</span>
+                        <span>•</span>
+                        <span id="scanType">Combined Scan</span>
+                        <span>•</span>
+                        <span id="scanDuration">0s</span>
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="downloadJSON()"
+                        class="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors font-medium">
+                        <span class="material-symbols-outlined">download</span>
+                        JSON Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Summary -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column: Summary -->
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-surface-dark border border-white/10 rounded-xl p-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <span class="material-symbols-outlined text-9xl">psychology</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                            AI Executive Summary
+                        </h3>
+                        <div id="aiSummaryText"
+                            class="prose prose-invert max-w-none text-text-muted-dark leading-relaxed">
+                            Generating AI analysis...
+                        </div>
+                    </div>
+
+                    <!-- Ports Summary -->
+                    <div id="portsSummaryCard"
+                        class="bg-surface-dark border border-white/10 rounded-xl overflow-hidden mb-8">
+                        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+                            <h3 class="text-xl font-bold">Ports Summary</h3>
+                            <div class="flex items-center gap-4 text-sm text-text-muted-dark">
+                                <span>Open: <span id="openPortsCount" class="font-bold text-green-400">0</span></span>
+                                <span>Closed/Filtered: <span id="closedPortsCount"
+                                        class="font-bold text-gray-400">0</span></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div id="openPortsList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                            <div id="noPortsMsg" class="hidden text-text-muted-dark text-sm mt-3">No port data available
+                                for this scan.</div>
+                        </div>
+                    </div>
+
+                    <!-- Vulnerabilities Table -->
+                    <div class="bg-surface-dark border border-white/10 rounded-xl overflow-hidden">
+                        <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                            <h3 class="font-bold text-lg">Detailed Findings</h3>
+                            <span id="vulnCount"
+                                class="bg-red-500/10 text-red-400 px-3 py-1 rounded-full text-xs font-bold">0
+                                Issues</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-white/5 uppercase text-xs font-semibold text-text-muted-dark">
+                                    <tr>
+                                        <th class="px-6 py-4">Severity</th>
+                                        <th class="px-6 py-4">Vulnerability</th>
+                                        <th class="px-6 py-4">Location</th>
+                                        <th class="px-6 py-4">Standard</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vulnTableBody" class="divide-y divide-white/5">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Stats & Meta -->
+                <div class="space-y-6">
+                    <!-- Risk Score -->
+                    <div class="bg-surface-dark border border-white/10 rounded-xl p-6 text-center">
+                        <p class="text-text-muted-dark text-sm font-medium uppercase mb-4">Overall Risk Level</p>
+                        <div id="riskLevel" class="inline-flex flex-col items-center">
+                            <span class="material-symbols-outlined text-6xl mb-2">shield</span>
+                            <span class="text-2xl font-black tracking-tight">UNKNOWN</span>
+                        </div>
+                    </div>
+
+                    <!-- Tool Status -->
+                    <div class="bg-surface-dark border border-white/10 rounded-xl p-6">
+                        <h4 class="font-bold mb-4 text-sm uppercase text-text-muted-dark">Tools Executed</h4>
+                        <div id="toolsList" class="space-y-3">
+                            <!-- Tool items -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Raw JSON Toggle -->
+            <div class="mt-8">
+                <button onclick="document.getElementById('rawJson').classList.toggle('hidden')"
+                    class="text-text-muted-dark hover:text-primary text-sm underline">
+                    View Raw JSON Data
+                </button>
+                <pre id="rawJson"
+                    class="hidden mt-4 p-4 bg-black/50 rounded-lg text-xs overflow-x-auto text-green-400 json-block"></pre>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // API_URL is defined in auth-helper.js
+        // const API_URL = 'http://localhost:5000';
+        let currentScanData = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const scanId = urlParams.get('id');
+
+            if (!scanId) {
+                showError('No scan ID provided');
+                return;
+            }
+
+            fetchScanResults(scanId);
+        });
+
+        async function fetchScanResults(scanId) {
+            try {
+                // Poll for completion if needed, but for now simple fetch
+                const response = await fetch(`${API_URL}/api/scan/${scanId}`, {
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    currentScanData = data;
+                    renderResults(data);
+                } else {
+                    showError(data.message);
+                }
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function renderResults(data) {
+            const scan = data.scan;
+            const vulns = data.vulnerabilities;
+            const ai = scan.ai_summary || {};
+
+            // Hide loading
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('resultsContent').classList.remove('hidden');
+
+            // Header
+            document.getElementById('targetUrl').textContent = scan.target;
+            document.getElementById('scanDate').textContent = new Date(scan.created_at).toLocaleDateString();
+            document.getElementById('scanType').textContent = (scan.tool || scan.scan_type).toUpperCase();
+            document.getElementById('scanDuration').textContent = scan.duration ? `${scan.duration.toFixed(1)}s` : '...';
+
+            // Status Badge
+            const statusEl = document.getElementById('statusBadge');
+            statusEl.textContent = scan.status;
+            if (scan.status === 'completed') statusEl.classList.replace('bg-gray-500/10', 'bg-green-500/10');
+            if (scan.status === 'completed') statusEl.classList.replace('text-gray-400', 'text-green-400');
+
+            // AI Summary
+            const summaryText = ai.executive_summary || (ai.summary ? ai.summary : "No AI analysis available for this scan.");
+            document.getElementById('aiSummaryText').innerHTML = `<p>${summaryText}</p>`;
+
+            // Risk Level
+            const riskEl = document.getElementById('riskLevel');
+            const riskIcon = riskEl.querySelector('.material-symbols-outlined');
+            const riskText = riskEl.querySelector('span:last-child');
+            const risk = (scan.risk_level || 'info').toLowerCase();
+
+            riskText.textContent = risk.toUpperCase();
+
+            const riskColors = {
+                'critical': 'text-red-500',
+                'high': 'text-orange-500',
+                'medium': 'text-yellow-500',
+                'low': 'text-blue-500',
+                'info': 'text-gray-500'
+            };
+
+            riskIcon.className = `material-symbols-outlined text-6xl mb-2 ${riskColors[risk] || 'text-gray-500'}`;
+            riskText.className = `text-2xl font-black tracking-tight ${riskColors[risk] || 'text-gray-500'}`;
+
+            // Tools List
+            const tools = (scan.tool || 'nmap').split(',');
+            const toolsContainer = document.getElementById('toolsList');
+            toolsContainer.innerHTML = tools.map(tool => `
+                <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+                    <span class="material-symbols-outlined text-primary">terminal</span>
+                    <span class="capitalize font-medium">${tool}</span>
+                    <span class="ml-auto material-symbols-outlined text-green-400 text-sm">check_circle</span>
+                </div>
+            `).join('');
+
+            // Ports Summary (user-friendly)
+            const ports = data.results || [];
+            const open = ports.filter(p => (p.state || '').toLowerCase() === 'open');
+            const closed = ports.filter(p => (p.state || '').toLowerCase() !== 'open');
+
+            document.getElementById('openPortsCount').textContent = open.length;
+            document.getElementById('closedPortsCount').textContent = closed.length;
+
+            const openList = document.getElementById('openPortsList');
+            const noPortsMsg = document.getElementById('noPortsMsg');
+
+            if (!ports.length) {
+                openList.innerHTML = '';
+                noPortsMsg.classList.remove('hidden');
+            } else {
+                noPortsMsg.classList.add('hidden');
+                const list = open.length ? open : ports.slice(0, 12);
+                openList.innerHTML = list.map(p => {
+                    const svc = p.service || 'unknown';
+                    const ver = p.version ? ` • ${p.version}` : '';
+                    const state = (p.state || '').toLowerCase();
+                    const badge = state === 'open'
+                        ? '<span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs font-bold">OPEN</span>'
+                        : '<span class="bg-gray-500/10 text-gray-400 px-2 py-0.5 rounded text-xs font-bold uppercase">' + (p.state || 'unknown') + '</span>';
+
+                    return `
+                        <div class="p-4 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between gap-3">
+                            <div>
+                                <div class="font-semibold text-white">
+                                    <span class="font-mono">${p.port}/${p.protocol || 'tcp'}</span>
+                                    <span class="text-text-muted-dark text-sm"> • ${svc}${ver}</span>
+                                </div>
+                                <div class="text-xs text-text-muted-dark mt-1">Service: <span class="font-mono">${svc}</span></div>
+                            </div>
+                            ${badge}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Vulnerabilities Table
+            document.getElementById('vulnCount').textContent = `${vulns.length} Issues`;
+            const tbody = document.getElementById('vulnTableBody');
+
+            if (vulns.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-text-muted-dark">No vulnerabilities detected. Good job!</td></tr>`;
+            } else {
+                tbody.innerHTML = vulns.map(v => `
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded text-xs font-bold uppercase ${getSeverityClass(v.severity)}">
+                                ${v.severity}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-white">${v.title}</div>
+                            <div class="text-xs text-text-muted-dark truncate max-w-[200px]">${v.description}</div>
+                        </td>
+                        <td class="px-6 py-4 text-text-muted-dark text-sm">Port ${v.affected_port || 'N/A'}</td>
+                        <td class="px-6 py-4">
+                            ${v.cve_id ? `<span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded text-xs font-mono mr-2">${v.cve_id}</span>` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Raw JSON
+            document.getElementById('rawJson').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function getSeverityClass(severity) {
+            const map = {
+                'critical': 'bg-red-500/20 text-red-500',
+                'high': 'bg-orange-500/20 text-orange-500',
+                'medium': 'bg-yellow-500/20 text-yellow-500',
+                'low': 'bg-blue-500/20 text-blue-500',
+                'info': 'bg-gray-500/20 text-gray-500'
+            };
+            return map[severity.toLowerCase()] || map['info'];
+        }
+
+        function showError(msg) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = msg;
+        }
+
+        function downloadJSON() {
+            if (!currentScanData) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentScanData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `scan_report_${currentScanData.scan.scan_id}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>My Dashboard - Security Suite</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="js/auth-helper.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass { background: rgba(22,27,34,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+        .stat-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,120,212,0.15); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .hero-gradient { background: linear-gradient(-45deg, #0d1117, #1a2332, #0d2137, #0d1117); background-size: 400% 400%; animation: gradientShift 15s ease infinite; }
+    button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: { extend: {
+                colors: { primary: "#0078d4", surface: "#161b22", bg: "#0d1117", border: "#30363d", muted: "#8b949e" }
+            }}
+        };
+    </script>
+</head>
+<body class="bg-[#0d1117] text-[#e6edf3] min-h-screen">
+
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 w-64 bg-[#161b22] border-r border-[#30363d] flex flex-col z-30">
+        <div class="p-5 border-b border-[#30363d]">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-[#0078d4] flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">shield</span>
+                </div>
+                <div>
+                    <p class="font-bold text-sm text-white">Security Suite</p>
+                    <p class="text-[#8b949e] text-xs">Pentest Platform</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="UserDashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#0078d4] text-white font-semibold text-sm">
+                <span class="material-symbols-outlined text-xl">dashboard</span> My Dashboard
+            </a>
+            <a href="Nmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">hub</span> Nmap Scanner
+            </a>
+            <a href="Ping.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">wifi_tethering</span> Ping Test
+            </a>
+            <a href="SQL.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">storage</span> SQL Scanner
+            </a>
+            <a href="Wfuzz.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">wysiwyg</span> Wfuzz
+            </a>
+            <a href="Harvester.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">travel_explore</span> Harvester
+            </a>
+            <a href="Nikto.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">bug_report</span> Nikto
+            </a>
+            <a href="Reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white transition-colors text-sm">
+                <span class="material-symbols-outlined text-xl">description</span> My Reports
+            </a>
+        </nav>
+        <div class="p-4 border-t border-[#30363d]">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-8 h-8 rounded-full bg-[#0078d4]/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#0078d4] text-lg">person</span>
+                </div>
+                <div>
+                    <p class="text-white text-sm font-medium" id="sidebarName">User</p>
+                    <p class="text-[#8b949e] text-xs" id="sidebarEmail"></p>
+                </div>
+            </div>
+            <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-base">logout</span> Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="ml-64 min-h-screen">
+        <header class="sticky top-0 z-20 bg-[#0d1117]/80 backdrop-blur border-b border-[#30363d] px-8 py-4 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-bold text-white">Welcome back, <span id="headerName" class="text-[#0078d4]">User</span> 👋</h1>
+                <p class="text-[#8b949e] text-sm">Here's your security activity overview</p>
+            </div>
+            <a href="Nmap.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0078d4] hover:bg-[#0078d4]/80 text-white text-sm font-semibold transition-colors">
+                <span class="material-symbols-outlined text-base">add</span> New Scan
+            </a>
+        </header>
+
+        <main class="p-8">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="stat-card glass rounded-xl p-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-[#0078d4]/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[#0078d4]">scanner</span>
+                        </div>
+                        <span class="text-[#8b949e] text-xs uppercase font-semibold">My Scans</span>
+                    </div>
+                    <p class="text-3xl font-black text-white" id="statMyScans">—</p>
+                    <p class="text-[#8b949e] text-xs mt-1" id="statScanToday"></p>
+                </div>
+                <div class="stat-card glass rounded-xl p-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-red-400">bug_report</span>
+                        </div>
+                        <span class="text-[#8b949e] text-xs uppercase font-semibold">Vulnerabilities</span>
+                    </div>
+                    <p class="text-3xl font-black text-white" id="statVulns">—</p>
+                    <p class="text-[#8b949e] text-xs mt-1">Across all my scans</p>
+                </div>
+                <div class="stat-card glass rounded-xl p-5 cursor-pointer" onclick="window.location.href='Reports.html'">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-purple-400">description</span>
+                        </div>
+                        <span class="text-[#8b949e] text-xs uppercase font-semibold">My Reports</span>
+                    </div>
+                    <p class="text-3xl font-black text-white" id="statReports">—</p>
+                    <p class="text-[#8b949e] text-xs mt-1">View reports →</p>
+                </div>
+            </div>
+
+            <!-- Quick scan launch banner -->
+            <div class="hero-gradient rounded-2xl p-7 mb-8 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#0078d4]/30 to-transparent pointer-events-none"></div>
+                <div class="relative z-10 flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-white mb-1">Start a New Scan</h2>
+                        <p class="text-[#8b949e] text-sm">Enter a URL, ping to verify connectivity, then choose your scan intensity.</p>
+                    </div>
+                    <a href="Nmap.html" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0078d4] hover:bg-[#0063b1] text-white font-bold text-sm transition-colors shadow-lg shadow-[#0078d4]/30">
+                        <span class="material-symbols-outlined">play_circle</span> Launch Scanner
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent scans -->
+            <div class="glass rounded-xl">
+                <div class="flex items-center justify-between p-5 border-b border-[#30363d]">
+                    <h2 class="font-bold text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#0078d4]">history</span>
+                        My Recent Scans
+                    </h2>
+                    <button onclick="loadHistory()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[#8b949e] hover:text-white text-xs transition-colors">
+                        <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+                    </button>
+                </div>
+                <div id="scanHistoryContainer" class="p-5">
+                    <div class="text-center py-8 text-[#8b949e] flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined animate-spin">sync</span> Loading...
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    (function() {
+        if (!sessionStorage.getItem('user_id')) { window.location.href = 'signin.html'; return; }
+        if (sessionStorage.getItem('user_role') === 'admin') { window.location.href = 'Dashbord.html'; return; }
+
+        const name  = sessionStorage.getItem('user_name') || 'User';
+        const email = sessionStorage.getItem('user_email') || '';
+        document.getElementById('sidebarName').textContent  = name;
+        document.getElementById('sidebarEmail').textContent = email;
+        document.getElementById('headerName').textContent   = name.split(' ')[0];
+
+        const STATUS_BADGE = {
+            completed: 'bg-green-500/15 text-green-400',
+            running:   'bg-yellow-500/15 text-yellow-400',
+            failed:    'bg-red-500/15 text-red-400',
+            pending:   'bg-blue-500/15 text-blue-400',
+        };
+        const SEV_BADGE = {
+            critical: 'bg-red-500/15 text-red-400',
+            high:     'bg-orange-500/15 text-orange-400',
+            medium:   'bg-yellow-500/15 text-yellow-400',
+            low:      'bg-green-500/15 text-green-400',
+            info:     'bg-blue-500/15 text-blue-400',
+        };
+
+        async function loadStats() {
+            try {
+                const [statsRes, rptRes] = await Promise.all([
+                    fetch(`${API_URL}/api/statistics`, { credentials: 'include' }),
+                    fetch(`${API_URL}/api/reports/list`, { credentials: 'include' }),
+                ]);
+                const stats = await statsRes.json();
+                const rpts  = await rptRes.json();
+                if (stats.status === 'success') {
+                    const s = stats.statistics;
+                    document.getElementById('statMyScans').textContent = s.total_scans ?? '—';
+                    document.getElementById('statScanToday').textContent = `+${s.scans_today ?? 0} today`;
+                    document.getElementById('statVulns').textContent = s.total_vulns ?? '—';
+                }
+                if (rpts.status === 'success') {
+                    document.getElementById('statReports').textContent = rpts.total ?? '—';
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadHistory() {
+            const c = document.getElementById('scanHistoryContainer');
+            c.innerHTML = '<div class="text-center py-8 text-[#8b949e] flex items-center justify-center gap-2"><span class="material-symbols-outlined animate-spin">sync</span> Loading...</div>';
+            try {
+                const res  = await fetch(`${API_URL}/api/scan-history?limit=10`, { credentials: 'include' });
+                const data = await res.json();
+                if (data.status !== 'success') throw new Error(data.message);
+                const scans = data.scans || [];
+                if (!scans.length) {
+                    c.innerHTML = `
+                    <div class="text-center py-12">
+                        <span class="material-symbols-outlined text-5xl text-[#30363d] block mb-3">hub</span>
+                        <p class="text-[#8b949e]">No scans yet.</p>
+                        <a href="Nmap.html" class="mt-3 inline-flex items-center gap-1 px-4 py-2 rounded-lg bg-[#0078d4] text-white text-sm font-semibold">
+                            <span class="material-symbols-outlined text-base">add</span> Start your first scan
+                        </a>
+                    </div>`;
+                    return;
+                }
+                c.innerHTML = '<div class="space-y-2">' + scans.map(s => {
+                    const sb = STATUS_BADGE[s.status] || STATUS_BADGE.pending;
+                    const rb = SEV_BADGE[s.risk_level] || SEV_BADGE.info;
+                    const date = s.created_at ? new Date(s.created_at).toLocaleDateString() : '—';
+                    const dur  = s.duration ? `${parseFloat(s.duration).toFixed(1)}s` : '';
+                    return `
+                    <div onclick="window.location.href='Nmap.html?scan=${s.scan_id}'" class="flex items-center justify-between p-4 rounded-lg bg-[#0d1117] hover:bg-[#0078d4]/5 cursor-pointer transition-all border border-transparent hover:border-[#0078d4]/30 group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-[#0078d4]/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-[#0078d4] text-lg">hub</span>
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm group-hover:text-[#0078d4] transition-colors">${s.target}</p>
+                                <p class="text-[#8b949e] text-xs">${s.scan_type.toUpperCase()} · ${date}${dur ? ' · ' + dur : ''}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${s.risk_level ? `<span class="px-2.5 py-1 rounded-full text-xs font-semibold ${rb}">${s.risk_level}</span>` : ''}
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${sb}">${s.status}</span>
+                            <span class="material-symbols-outlined text-[#30363d] group-hover:text-[#0078d4] transition-colors">chevron_right</span>
+                        </div>
+                    </div>`;
+                }).join('') + '</div>';
+            } catch(e) {
+                c.innerHTML = `<p class="text-red-400 text-sm py-4">Error loading history: ${e.message}</p>`;
+            }
+        }
+
+        loadStats();
+        loadHistory();
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Nmap Scanner - Security Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="js/auth-helper.js"></script>
+<style>
+body{font-family:'Inter',sans-serif}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass{background:rgba(22,27,34,.9);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slide{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+.spin{animation:spin 1s linear infinite}
+.shimmer{position:relative;overflow:hidden}
+.shimmer::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:slide 1.5s ease-in-out infinite}
+.scan-opt{cursor:pointer;transition:all .2s;border:2px solid #30363d}
+.scan-opt:hover{border-color:#0078d4}
+.scan-opt.selected{border-color:rgba(0,120,212,.4)!important;background:rgba(0,120,212,.08)!important}
+.scan-check{opacity:0;transform:scale(0);transition:all .2s}
+.scan-opt.selected .scan-check{opacity:1;transform:scale(1)}
+.vuln-card{border-left:3px solid transparent}
+.vuln-critical{border-left-color:#da3633}.vuln-high{border-left-color:#f85149}
+.vuln-medium{border-left-color:#d29922}.vuln-low{border-left-color:#3fb950}.vuln-info{border-left-color:#58a6ff}
+button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#0078d4"}}}}</script>
+</head>
+<body class="bg-[#0d1117] text-[#e6edf3] min-h-screen dark">
+
+<!-- Sidebar -->
+<div class="fixed inset-y-0 left-0 w-64 bg-[#161b22] border-r border-[#30363d] flex flex-col z-30">
+  <div class="p-5 border-b border-[#30363d] flex items-center gap-3">
+    <div class="w-9 h-9 rounded-lg bg-[#0078d4] flex items-center justify-center"><span class="material-symbols-outlined text-white text-xl">shield</span></div>
+    <div><p class="font-bold text-sm text-white">Security Suite</p><p class="text-[#8b949e] text-xs">Pentest Platform</p></div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <a href="#" id="dashLink" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">dashboard</span>Dashboard</a>
+    <a href="Ping.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">wifi_tethering</span>Ping Test</a>
+    <a href="Nmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#0078d4] text-white font-semibold text-sm"><span class="material-symbols-outlined text-xl">hub</span>Nmap Scanner</a>
+    <a href="SQL.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">storage</span>SQL Scanner</a>
+    <a href="Wfuzz.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">wysiwyg</span>Wfuzz</a>
+    <a href="Harvester.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">travel_explore</span>Harvester</a>
+    <a href="Nikto.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">bug_report</span>Nikto</a>
+    <a href="Reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">description</span>Reports</a>
+  </nav>
+  <div class="p-4 border-t border-[#30363d]">
+    <p class="text-white text-sm font-medium mb-2" id="sidebarName">User</p>
+    <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-medium"><span class="material-symbols-outlined text-base">logout</span>Sign Out</button>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="ml-64 min-h-screen">
+  <header class="sticky top-0 z-20 bg-[#0d1117]/80 backdrop-blur border-b border-[#30363d] px-8 py-4">
+    <h1 class="text-xl font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-[#0078d4]">hub</span>Nmap Scanner</h1>
+    <p class="text-[#8b949e] text-sm">Real port scanning · AI analysis by Google Gemini</p>
+  </header>
+
+  <main class="p-8 max-w-4xl space-y-5">
+
+    <!-- Step 1: Target + Ping -->
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-7 h-7 rounded-full bg-[#0078d4] flex items-center justify-center text-white text-xs font-bold">1</div>
+        <h2 class="font-bold text-white">Enter Target URL</h2>
+        <span class="text-[#8b949e] text-xs ml-1">(http/https not required)</span>
+      </div>
+      <div class="flex gap-3 flex-wrap">
+        <div class="flex-1 relative min-w-48">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#8b949e]">language</span>
+          <input id="targetInput" type="text" placeholder="scanme.nmap.org  or  example.com"
+            class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-[#0d1117] border border-[#30363d] text-white placeholder-[#8b949e] focus:outline-none focus:border-[#0078d4] text-sm"
+            autocomplete="off"/>
+        </div>
+        <button id="pingBtn" class="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-[#0078d4] hover:bg-[#0063b1] text-white font-semibold text-sm transition-all active:scale-95">
+          <span class="material-symbols-outlined">wifi_tethering</span>Ping
+        </button>
+      </div>
+      <div id="pingResult" class="hidden mt-4 p-4 rounded-xl border"></div>
+    </div>
+
+    <!-- Step 2: Scan type -->
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-7 h-7 rounded-full bg-[#0078d4] flex items-center justify-center text-white text-xs font-bold">2</div>
+        <h2 class="font-bold text-white">Scan Intensity</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="scan-opt selected rounded-xl p-5 bg-[#0d1117]" data-type="normal" onclick="selectScan(this)">
+          <div class="flex justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-green-500/15 flex items-center justify-center"><span class="material-symbols-outlined text-green-400">speed</span></div><span class="material-symbols-outlined text-green-400 scan-check" style="opacity:1;transform:scale(1)">check_circle</span></div>
+          <h3 class="font-bold text-white mb-1">Normal</h3>
+          <p class="text-[#8b949e] text-xs">Top 100 ports fast scan. ~15-30s</p>
+          <code class="mt-2 block text-xs text-green-400 bg-green-500/5 px-2 py-1 rounded">-T4 -F</code>
+        </div>
+        <div class="scan-opt rounded-xl p-5 bg-[#0d1117]" data-type="medium" onclick="selectScan(this)">
+          <div class="flex justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-yellow-500/15 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400">manage_search</span></div><span class="material-symbols-outlined text-green-400 scan-check">check_circle</span></div>
+          <h3 class="font-bold text-white mb-1">Medium</h3>
+          <p class="text-[#8b949e] text-xs">Version detection + default scripts. ~1-3 min</p>
+          <code class="mt-2 block text-xs text-yellow-400 bg-yellow-500/5 px-2 py-1 rounded">-sV --script default</code>
+        </div>
+        <div class="scan-opt rounded-xl p-5 bg-[#0d1117]" data-type="strong" onclick="selectScan(this)">
+          <div class="flex justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-red-500/15 flex items-center justify-center"><span class="material-symbols-outlined text-red-400">security_scanner</span></div><span class="material-symbols-outlined text-green-400 scan-check">check_circle</span></div>
+          <h3 class="font-bold text-white mb-1">Strong</h3>
+          <p class="text-[#8b949e] text-xs">Aggressive + OS detection. ~5-15 min</p>
+          <code class="mt-2 block text-xs text-red-400 bg-red-500/5 px-2 py-1 rounded">-T4 -A</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consent + Start -->
+    <div class="glass rounded-2xl p-6">
+      <label class="flex gap-3 cursor-pointer mb-5">
+        <input type="checkbox" id="consentCheck" class="mt-0.5 w-4 h-4 rounded border-[#30363d] text-[#0078d4]"/>
+        <span class="text-[#8b949e] text-sm">I confirm I have explicit authorization to scan this target. Unauthorized scanning is illegal.</span>
+      </label>
+      <button id="startScanBtn" disabled class="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-gradient-to-r from-[#0078d4] to-[#0063b1] text-white font-bold text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-xl hover:shadow-[#0078d4]/30 active:scale-[0.99]">
+        <span class="material-symbols-outlined text-2xl">play_circle</span>
+        <span id="startBtnText">Start Scan</span>
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div id="progressSection" class="hidden glass rounded-2xl p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-[#0078d4] text-2xl spin">sync</span>
+        <div><p class="text-white font-semibold" id="progressTitle">Running scan…</p><p class="text-[#8b949e] text-sm">Please wait — do not close this page</p></div>
+      </div>
+      <div class="h-1.5 bg-[#30363d] rounded-full overflow-hidden">
+        <div id="progressFill" class="h-full bg-gradient-to-r from-[#0078d4] to-blue-400 rounded-full transition-all shimmer" style="width:5%"></div>
+      </div>
+      <p class="text-[#8b949e] text-xs mt-2 text-center" id="elapsedTimer">Elapsed: 0s</p>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" class="hidden space-y-5">
+
+      <!-- AI Card -->
+      <div class="glass rounded-2xl p-6 border border-[#0078d4]/30">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-[#0078d4]">auto_awesome</span>
+          <h2 class="font-bold text-white">AI Security Analysis</h2>
+          <span id="aiStatus" class="ml-auto px-2 py-1 rounded-full text-xs font-semibold bg-[#0078d4]/10 text-[#0078d4]">Gemini</span>
+        </div>
+        <div class="flex items-center gap-6 flex-wrap mb-3">
+          <div class="text-center"><p class="text-4xl font-black" id="riskScore">—</p><p class="text-[#8b949e] text-xs">Risk Score</p></div>
+          <div class="text-center"><p class="text-4xl font-black" id="riskGrade">—</p><p class="text-[#8b949e] text-xs">Grade</p></div>
+          <p class="flex-1 text-[#8b949e] text-sm leading-relaxed min-w-48" id="execSummary">Loading…</p>
+        </div>
+        <div id="recommendsList" class="hidden space-y-2 mt-4 pt-4 border-t border-[#30363d]">
+          <p class="text-xs font-semibold text-[#8b949e] uppercase mb-2">Recommendations</p>
+        </div>
+      </div>
+
+      <!-- Ports -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="font-bold text-white mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#0078d4]">settings_ethernet</span>Open Ports
+          <span class="ml-auto px-2.5 py-1 rounded-full bg-[#0078d4]/10 text-[#0078d4] text-xs font-semibold" id="portCount">0</span>
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-[#30363d]">
+          <table class="w-full text-sm">
+            <thead class="bg-[#0d1117] border-b border-[#30363d]">
+              <tr class="text-[#8b949e] text-xs uppercase">
+                <th class="px-4 py-3 text-left">Port</th><th class="px-4 py-3 text-left">Proto</th>
+                <th class="px-4 py-3 text-left">State</th><th class="px-4 py-3 text-left">Service</th>
+                <th class="px-4 py-3 text-left">Version</th>
+              </tr>
+            </thead>
+            <tbody id="portsTable" class="divide-y divide-[#30363d]">
+              <tr><td colspan="5" class="px-4 py-6 text-center text-[#8b949e]">No open ports found</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Vulnerabilities -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="font-bold text-white mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-400">bug_report</span>Vulnerabilities
+          <span class="ml-auto px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold" id="vulnCount">0</span>
+        </h2>
+        <div id="vulnsList"><p class="text-[#8b949e] text-sm py-2">No vulnerabilities detected by scanner scripts.</p></div>
+      </div>
+
+      <!-- Generate Report -->
+      <div class="glass rounded-2xl p-6 border border-purple-500/30">
+        <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-purple-400">picture_as_pdf</span><h2 class="font-bold text-white">Generate AI Report</h2></div>
+        <p class="text-[#8b949e] text-sm mb-4">Professional PDF + JSON report with AI analysis and mitigation advice.</p>
+        <button id="generateReportBtn" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all active:scale-95">
+          <span class="material-symbols-outlined" id="rptIcon">picture_as_pdf</span>
+          <span id="reportBtnText">Generate PDF + JSON Report</span>
+        </button>
+        <div id="reportLinks" class="hidden mt-4 flex flex-wrap gap-3"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const auth=checkAuth();
+  if(!auth)return;
+  const user=getUser();
+  const role=user.role;
+  document.getElementById('dashLink').href=role==='admin'?'Dashbord.html':'UserDashboard.html';
+  document.getElementById('sidebarName').textContent=user.name||'User';
+
+  let selectedType='normal', scanId=null;
+  let elapsedSeconds = 0;
+  let timerInterval = null;
+
+  const SEV={critical:'bg-red-500/15 text-red-400',high:'bg-orange-500/15 text-orange-400',medium:'bg-yellow-500/15 text-yellow-400',low:'bg-green-500/15 text-green-400',info:'bg-blue-500/15 text-blue-400'};
+  const GC={A:'text-green-400',B:'text-blue-400',C:'text-yellow-400',D:'text-orange-400',F:'text-red-400'};
+
+  // Load existing scan from URL param ?scan=<scan_id> (e.g. when clicking from dashboard)
+  (async function loadFromUrl(){
+    const param=new URLSearchParams(window.location.search).get('scan');
+    if(!param) return;
+    scanId=param;
+    const banner=document.getElementById('pingResult');
+    banner.classList.remove('hidden');
+    banner.className='mt-4 p-3 rounded-xl border border-[#30363d] bg-[#0d1117] text-[#8b949e] text-sm flex gap-2';
+    banner.innerHTML='<span class="material-symbols-outlined spin">sync</span>Loading scan results…';
+    try{
+      const r=await fetch(`${API_URL}/api/scan/${param}`,{credentials:'include'});
+      const d=await r.json();
+      if(d.status!=='success'){banner.className='mt-4 p-4 rounded-xl border border-red-500/30 bg-red-500/5';banner.innerHTML=`<p class="text-red-400 text-sm">Failed to load scan: ${d.message||'Unknown'}</p>`;return;}
+      banner.classList.add('hidden');
+      // Merge scan + results into the renderResults data shape
+      const merged={
+        scan_id:d.scan.scan_id,
+        target:d.scan.target,
+        scan_type:d.scan.scan_type,
+        duration:d.scan.duration,
+        results:d.results,          // flat array from DB
+        vulnerabilities:d.vulnerabilities||[],
+        ai_summary:d.scan.ai_summary||{},
+        ai_report:d.ai_report||{}
+      };
+      document.getElementById('targetInput').value=d.scan.target||'';
+      renderResults(merged);
+    }catch(e){
+      banner.className='mt-4 p-4 rounded-xl border border-red-500/30 bg-red-500/5';
+      banner.innerHTML=`<p class="text-red-400 text-sm">Error loading scan: ${e.message}</p>`;
+    }
+  })();
+
+  window.selectScan=function(el){
+    document.querySelectorAll('.scan-opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected'); selectedType=el.dataset.type;
+  };
+
+  document.getElementById('consentCheck').addEventListener('change',function(){
+    document.getElementById('startScanBtn').disabled=!this.checked;
+  });
+
+  function showError(msg){
+    const b=document.getElementById('pingResult');b.classList.remove('hidden');
+    b.className='mt-4 p-4 rounded-xl border border-red-500/30 bg-red-500/5';
+    b.innerHTML=`<p class="text-red-400 font-semibold text-sm flex items-center gap-1"><span class="material-symbols-outlined text-base">cancel</span>${msg}</p>`;
+  }
+
+  function validateTarget(value,tool){
+    const cleaned=value.trim();
+    const isIP=/^(\d{1,3}\.){3}\d{1,3}/.test(cleaned);
+    if(!cleaned){showError('Please enter a target domain.');return false;}
+    if(isIP){showError('IP addresses are not accepted. Please enter a domain name.');return false;}
+    if(/^https?:\/\//i.test(cleaned)){showError('Remove http:// — enter domain only e.g. example.com');return false;}
+    if(/\s/.test(cleaned)){showError('Domain cannot contain spaces.');return false;}
+    return cleaned;
+  }
+
+  function startTimer(){
+    elapsedSeconds=0;
+    const timerEl=document.getElementById('elapsedTimer');
+    if(timerEl)timerEl.textContent='Elapsed: 0s';
+    stopTimer();
+    timerInterval=setInterval(()=>{
+      elapsedSeconds++;
+      if(timerEl)timerEl.textContent='Elapsed: '+elapsedSeconds+'s';
+    },1000);
+  }
+
+  function stopTimer(){
+    if(timerInterval){
+      clearInterval(timerInterval);
+      timerInterval=null;
+    }
+  }
+
+  function normalize(raw){
+    raw=raw.trim().replace(/^https?:\/\//i,'');
+    raw=raw.split('/')[0].split('?')[0].split('#')[0];
+    if(!raw.match(/\[.*\]/))raw=raw.split(':')[0];
+    return raw.trim();
+  }
+
+  document.getElementById('targetInput').addEventListener('input',function(){
+    document.getElementById('pingResult').classList.add('hidden');
+  });
+
+  // PING
+  document.getElementById('pingBtn').addEventListener('click',async function(){
+    const target=normalize(document.getElementById('targetInput').value);
+    if(!target){showPing(false,null,'Enter a target first');return;}
+    document.getElementById('targetInput').value=target;
+    this.disabled=true;
+    this.innerHTML='<span class="material-symbols-outlined spin">sync</span>Pinging…';
+    showPing(null,null,'Checking connectivity…','load');
+    try{
+      const r=await fetch(`${API_URL}/api/ping`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({target})});
+      const d=await r.json();
+      if(d.status==='error'){showPing(false,null,d.message);}
+      else{showPing(d.reachable,d,d.message);}
+    }catch(e){showPing(false,null,'Backend error: '+e.message);}
+    this.disabled=false;
+    this.innerHTML='<span class="material-symbols-outlined">wifi_tethering</span>Ping';
+  });
+
+  function showPing(ok,d,msg,state){
+    const b=document.getElementById('pingResult');b.classList.remove('hidden');
+    if(state==='load'){b.className='mt-4 p-4 rounded-xl border border-[#30363d] bg-[#0d1117] text-[#8b949e] text-sm flex gap-2';b.innerHTML=`<span class="material-symbols-outlined spin">sync</span>${msg}`;return;}
+    if(ok){
+      b.className='mt-4 p-4 rounded-xl border border-green-500/30 bg-green-500/5';
+      const ip=d?.ip_address||'';const lat=d?.latency_ms!=null?d.latency_ms+'ms':'N/A';
+      b.innerHTML=`<p class="text-green-400 font-semibold text-sm mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-base">check_circle</span>${msg}</p><p class="text-[#8b949e] text-xs">${ip?'IP: '+ip+' · ':''}Latency: ${lat}</p>`;
+    }else{
+      b.className='mt-4 p-4 rounded-xl border border-red-500/30 bg-red-500/5';
+      b.innerHTML=`<p class="text-red-400 font-semibold text-sm flex items-center gap-1"><span class="material-symbols-outlined text-base">cancel</span>${msg||'Unreachable'}</p><p class="text-[#8b949e] text-xs mt-1">Target unreachable — fix connectivity before scanning.</p>`;
+    }
+  }
+
+  // SCAN
+  document.getElementById('startScanBtn').addEventListener('click',async function(){
+    const target=validateTarget(document.getElementById('targetInput').value,'nmap');
+    if(!target)return;
+    document.getElementById('targetInput').value=target;
+    document.getElementById('resultsSection').classList.add('hidden');
+    const ps=document.getElementById('progressSection');ps.classList.remove('hidden');
+    startTimer();
+    this.disabled=true;
+    document.getElementById('progressTitle').textContent=`Running ${selectedType} scan on ${target}…`;
+    const fill=document.getElementById('progressFill');fill.style.width='5%';
+    try{
+      const res=await fetch(`${API_URL}/api/scan`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({target,scan_type:selectedType,consent:true})});
+      const data=await res.json();
+      stopTimer();fill.style.width='100%';
+      ps.classList.add('hidden');
+      if(data.status!=='success'){alert('Scan failed: '+(data.message||'Unknown'));this.disabled=false;document.getElementById('consentCheck').checked=false;return;}
+      scanId=data.scan_id;renderResults(data);this.disabled=false;
+    }catch(e){stopTimer();ps.classList.add('hidden');alert('Error: '+e.message);this.disabled=false;document.getElementById('consentCheck').checked=false;}
+  });
+
+  function renderResults(data){
+    document.getElementById('resultsSection').classList.remove('hidden');
+    document.getElementById('resultsSection').scrollIntoView({behavior:'smooth'});
+    const ai=data.ai_report||{};const sum=data.ai_summary||{};
+    const sc=ai.risk_score??sum.risk_score??0;const gr=ai.risk_grade??'—';
+    const ex=ai.executive_summary||sum.summary||'Analysis unavailable.';
+    const gc=GC[gr]||'text-white';
+    document.getElementById('riskScore').textContent=sc;document.getElementById('riskScore').className=`text-4xl font-black ${gc}`;
+    document.getElementById('riskGrade').textContent=gr;document.getElementById('riskGrade').className=`text-4xl font-black ${gc}`;
+    document.getElementById('execSummary').textContent=ex;
+    document.getElementById('aiStatus').textContent=ai.ai_generated?'✓ Gemini AI':'Rule-based';
+
+    // Recommendations
+    const recs=ai.recommendations||[];
+    if(recs.length){
+      const rl=document.getElementById('recommendsList');rl.classList.remove('hidden');
+      rl.querySelectorAll('div').forEach(e=>e.remove());
+      recs.slice(0,4).forEach(r=>{
+        const d=document.createElement('div');
+        d.className='flex items-start gap-2 text-xs text-[#8b949e]';
+        d.innerHTML=`<span class="material-symbols-outlined text-green-400 text-sm mt-0.5">check</span><span><strong class="text-white">[${(r.priority||'').toUpperCase()}]</strong> ${r.action||''}</span>`;
+        rl.appendChild(d);
+      });
+    }
+
+    // Ports — handle both fresh-scan format (nested) and DB-loaded format (flat array)
+    let ports=[];
+    try{
+      const r=data.results;
+      if(Array.isArray(r)){
+        // DB format: results is already a flat list [{port,protocol,state,service,version}]
+        ports=r;
+      } else if(r&&r.results){
+        // Fresh scan format: results.results.{scan_type}.ports
+        Object.values(r.results).forEach(v=>{if(v&&v.ports)ports=ports.concat(v.ports);});
+      } else if(r&&r.ports){
+        ports=r.ports;
+      }
+    }catch(e){}
+    document.getElementById('portCount').textContent=ports.length;
+    const tb=document.getElementById('portsTable');
+    if(ports.length){
+      tb.innerHTML=ports.map(p=>{
+        const s=p.service||{};
+        const sn=typeof s==='object'?(s.name||'—'):(s||'—');
+        const sv=typeof s==='object'?[s.product,s.version].filter(Boolean).join(' '):(p.version||'');
+        return `<tr class="hover:bg-white/2 transition-colors">
+          <td class="px-4 py-3 font-mono font-bold text-[#0078d4]">${p.port||'—'}</td>
+          <td class="px-4 py-3 text-[#8b949e] text-xs uppercase">${p.protocol||'tcp'}</td>
+          <td class="px-4 py-3"><span class="${p.state==='open'?'text-green-400':'text-[#8b949e]'} text-xs font-medium">${p.state||'—'}</span></td>
+          <td class="px-4 py-3 text-white font-medium text-sm">${sn}</td>
+          <td class="px-4 py-3 text-[#8b949e] text-xs font-mono">${sv||'—'}</td>
+        </tr>`;
+      }).join('');
+    }else{tb.innerHTML='<tr><td colspan="5" class="px-4 py-6 text-center text-[#8b949e]">No open ports found</td></tr>';}
+
+    // Vulns
+    const vulns=data.vulnerabilities||[];const ti=ai.top_findings||[];
+    const all=vulns.length?vulns:ti;
+    document.getElementById('vulnCount').textContent=all.length;
+    const vl=document.getElementById('vulnsList');
+    if(all.length){
+      vl.innerHTML=all.map(v=>{
+        const sv=(v.severity||'info').toLowerCase();const b=SEV[sv]||SEV.info;
+        const cve=v.cve_id||v.cve_references?.[0]||'';
+        return `<div class="vuln-card vuln-${sv} glass rounded-xl p-4 mb-3">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <h3 class="font-semibold text-white text-sm flex-1">${v.title||'Unknown'}</h3>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${b}">${sv.toUpperCase()}</span>
+          </div>
+          ${cve?`<p class="text-[#8b949e] text-xs font-mono mb-1">${cve}</p>`:''}
+          ${v.description?`<p class="text-[#8b949e] text-xs leading-relaxed mb-2">${v.description.slice(0,280)}</p>`:''}
+          ${v.remediation||v.impact?`<div class="mt-2 p-2 rounded bg-green-500/5 border border-green-500/20 text-xs text-green-300"><strong>Fix:</strong> ${v.remediation||v.impact}</div>`:''}
+        </div>`;
+      }).join('');
+    }else{vl.innerHTML='<p class="text-[#8b949e] text-sm py-2">No vulnerabilities detected.</p>';}
+  }
+
+  // REPORT
+  document.getElementById('generateReportBtn').addEventListener('click',async function(){
+    if(!scanId){alert('Run a scan first.');return;}
+    this.disabled=true;document.getElementById('rptIcon').textContent='sync';document.getElementById('rptIcon').classList.add('spin');
+    document.getElementById('reportBtnText').textContent='Generating…';
+    try{
+      const res=await fetch(`${API_URL}/api/reports/generate`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({scan_id:scanId})});
+      if(!res.ok)throw new Error('Server error '+res.status);
+      const data=await res.json();
+      document.getElementById('rptIcon').classList.remove('spin');
+      if(data.status==='success'){
+        document.getElementById('rptIcon').textContent='check_circle';
+        document.getElementById('reportBtnText').textContent='Report Generated!';
+        const ld=document.getElementById('reportLinks');ld.classList.remove('hidden');ld.innerHTML='';
+        if(data.downloads?.json){const a=document.createElement('a');a.href=API_URL+data.downloads.json;a.download='';a.className='flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0078d4]/10 border border-[#0078d4]/30 text-[#0078d4] text-sm font-semibold hover:bg-[#0078d4]/20';a.innerHTML='<span class="material-symbols-outlined text-base">code</span>Download JSON';ld.appendChild(a);}
+        if(data.downloads?.csv){const a=document.createElement('a');a.href=API_URL+data.downloads.csv;a.download='';a.className='flex items-center gap-2 px-4 py-2.5 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold hover:bg-green-500/20 transition-all';a.innerHTML='<span class="material-symbols-outlined text-base">table_view</span>Download CSV';ld.appendChild(a);}
+        if(data.downloads?.pdf){const a=document.createElement('a');a.href=API_URL+data.downloads.pdf;a.download='';a.className='flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold hover:bg-red-500/20';a.innerHTML='<span class="material-symbols-outlined text-base">picture_as_pdf</span>Download PDF';ld.appendChild(a);}
+        const rr=document.createElement('a');rr.href='Reports.html';rr.className='flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-[#30363d] text-[#8b949e] text-sm font-semibold hover:bg-white/10';rr.innerHTML='<span class="material-symbols-outlined text-base">folder_open</span>All Reports';ld.appendChild(rr);
+      }else{alert('Report failed: '+(data.message||''));document.getElementById('rptIcon').textContent='picture_as_pdf';document.getElementById('reportBtnText').textContent='Generate PDF + JSON Report';this.disabled=false;}
+    }catch(e){alert('Error: '+e.message);document.getElementById('rptIcon').textContent='picture_as_pdf';document.getElementById('reportBtnText').textContent='Generate PDF + JSON Report';this.disabled=false;}
+  });
+})();
+</script>
+</body></html>

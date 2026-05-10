@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Reports - Security Suite</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script src="js/auth-helper.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+    }
+
+    .glass {
+      background: rgba(22, 27, 34, .9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, .08)
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .spin {
+      animation: spin 1s linear infinite
+    }
+  button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#0078d4' } } } }</script>
+</head>
+
+<body class="bg-[#0d1117] text-[#e6edf3] min-h-screen dark">
+
+  <!-- Sidebar -->
+  <div class="fixed inset-y-0 left-0 w-64 bg-[#161b22] border-r border-[#30363d] flex flex-col z-30">
+    <div class="p-5 border-b border-[#30363d] flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-[#0078d4] flex items-center justify-center"><span
+          class="material-symbols-outlined text-white text-xl">shield</span></div>
+      <div>
+        <p class="font-bold text-sm text-white">Security Suite</p>
+        <p class="text-[#8b949e] text-xs">Pentest Platform</p>
+      </div>
+    </div>
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="#" id="dashLink"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">dashboard</span>Dashboard</a>
+      <a href="Ping.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">wifi_tethering</span>Ping Test</a>
+      <a href="Nmap.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">hub</span>Nmap Scanner</a>
+      <a href="SQL.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">storage</span>SQL Scanner</a>
+      <a href="Wfuzz.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">wysiwyg</span>Wfuzz</a>
+      <a href="Harvester.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">travel_explore</span>Harvester</a>
+      <a href="Nikto.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span
+          class="material-symbols-outlined text-xl">bug_report</span>Nikto</a>
+      <a href="Reports.html"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#0078d4] text-white font-semibold text-sm"><span
+          class="material-symbols-outlined text-xl">description</span>Reports</a>
+    </nav>
+    <div class="p-4 border-t border-[#30363d]">
+      <p class="text-white text-sm font-medium mb-2" id="sidebarName">User</p>
+      <button onclick="logout()"
+        class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-medium"><span
+          class="material-symbols-outlined text-base">logout</span>Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="ml-64 min-h-screen">
+    <header
+      class="sticky top-0 z-20 bg-[#0d1117]/80 backdrop-blur border-b border-[#30363d] px-8 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-bold text-white flex items-center gap-2"><span
+            class="material-symbols-outlined text-[#0078d4]">description</span>Security Reports</h1>
+        <p class="text-[#8b949e] text-sm">AI-generated scan reports with PDF and CSV downloads</p>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="loadReports()"
+          class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#8b949e] hover:text-white text-sm transition-colors">
+          <span class="material-symbols-outlined text-base">refresh</span>Refresh
+        </button>
+        <!-- Admin upload button (shown only to admins) -->
+        <button id="uploadBtn"
+          class="hidden flex items-center gap-1.5 px-4 py-2 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 text-sm transition-colors"
+          onclick="document.getElementById('uploadModal').classList.remove('hidden')">
+          <span class="material-symbols-outlined text-base">upload</span>Upload Report
+        </button>
+      </div>
+    </header>
+
+    <main class="p-8">
+      <!-- Stats row -->
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="glass rounded-xl p-4 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-[#0078d4]/20 flex items-center justify-center"><span
+              class="material-symbols-outlined text-[#0078d4]">description</span></div>
+          <div>
+            <p class="text-2xl font-black text-white" id="totalReports">—</p>
+            <p class="text-[#8b949e] text-xs">Total Reports</p>
+          </div>
+        </div>
+        <div class="glass rounded-xl p-4 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center"><span
+              class="material-symbols-outlined text-red-400">picture_as_pdf</span></div>
+          <div>
+            <p class="text-2xl font-black text-white" id="pdfCount">—</p>
+            <p class="text-[#8b949e] text-xs">PDF Reports</p>
+          </div>
+        </div>
+        <div class="glass rounded-xl p-4 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center"><span
+              class="material-symbols-outlined text-green-400">code</span></div>
+          <div>
+            <p class="text-2xl font-black text-white" id="jsonCount">—</p>
+            <p class="text-[#8b949e] text-xs">JSON Reports</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports table -->
+      <div class="glass rounded-xl">
+        <div class="p-5 border-b border-[#30363d] flex items-center justify-between">
+          <h2 class="font-bold text-white">Report History</h2>
+          <input id="searchReports" type="text" placeholder="Filter by target…"
+            class="px-3 py-1.5 rounded-lg bg-[#0d1117] border border-[#30363d] text-white placeholder-[#8b949e] text-sm focus:outline-none focus:border-[#0078d4] w-48" />
+        </div>
+        <div id="reportsContainer" class="p-5">
+          <div class="text-center py-8 text-[#8b949e] flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined spin">sync</span>Loading reports…
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Upload Modal (admin) -->
+  <div id="uploadModal"
+    class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="glass rounded-2xl w-full max-w-md p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-white">Upload External Report</h2>
+        <button onclick="document.getElementById('uploadModal').classList.add('hidden')"
+          class="text-[#8b949e] hover:text-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <p class="text-[#8b949e] text-sm mb-4">Upload an external PDF or JSON report file.</p>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div id="dropZone"
+          class="border-2 border-dashed border-[#30363d] rounded-xl p-8 text-center mb-4 cursor-pointer hover:border-[#0078d4] transition-colors"
+          onclick="document.getElementById('fileInput').click()">
+          <span class="material-symbols-outlined text-4xl text-[#8b949e] block mb-2">cloud_upload</span>
+          <p class="text-[#8b949e] text-sm">Click to select or drop a file here</p>
+          <p class="text-[#8b949e] text-xs mt-1">PDF or JSON files only</p>
+        </div>
+        <input id="fileInput" type="file" accept=".pdf,.json" class="hidden" onchange="handleFileSelect(this)" />
+        <div id="fileSelected"
+          class="hidden mb-4 p-3 rounded-lg bg-[#0d1117] border border-[#30363d] flex items-center gap-2 text-sm">
+          <span class="material-symbols-outlined text-[#0078d4]">description</span>
+          <span id="fileName" class="text-white truncate flex-1"></span>
+          <button type="button" onclick="clearFile()" class="text-[#8b949e] hover:text-red-400"><span
+              class="material-symbols-outlined text-base">close</span></button>
+        </div>
+        <button type="submit" id="uploadSubmitBtn" disabled
+          class="w-full py-3 rounded-xl bg-[#0078d4] hover:bg-[#0063b1] text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+          Upload Report
+        </button>
+      </form>
+      <div id="uploadMsg" class="hidden mt-3 text-sm text-center"></div>
+    </div>
+  </div>
+
+  <script>
+      (function () {
+        const auth = checkAuth();
+        if (!auth) return;
+        const user = getUser();
+        const role = user.role;
+        document.getElementById('dashLink').href = role === 'admin' ? 'Dashbord.html' : 'UserDashboard.html';
+        document.getElementById('sidebarName').textContent = user.name || 'User';
+        if (role === 'admin') document.getElementById('uploadBtn').classList.remove('hidden');
+
+        const SEV = { critical: 'bg-red-500/10 text-red-400', high: 'bg-orange-500/10 text-orange-400', medium: 'bg-yellow-500/10 text-yellow-400', low: 'bg-green-500/10 text-green-400', info: 'bg-blue-500/10 text-blue-400' };
+        const STATUS = { completed: 'bg-green-500/10 text-green-400', running: 'bg-yellow-500/10 text-yellow-400', failed: 'bg-red-500/10 text-red-400' };
+
+        let allReports = [];
+
+        async function loadReports() {
+          const c = document.getElementById('reportsContainer');
+          c.innerHTML = '<div class="text-center py-8 text-[#8b949e] flex items-center justify-center gap-2"><span class="material-symbols-outlined spin">sync</span>Loading…</div>';
+          try {
+            const res = await fetch(`${API_URL}/api/reports/list`, { credentials: 'include' });
+            if (!res.ok) throw new Error('Server error ' + res.status);
+            const data = await res.json();
+            if (data.status !== 'success') throw new Error(data.message);
+            allReports = data.reports || [];
+            const pdfs = allReports.filter(r => r.has_pdf).length;
+            const jsons = allReports.filter(r => r.has_json).length;
+            document.getElementById('totalReports').textContent = allReports.length;
+            document.getElementById('pdfCount').textContent = pdfs;
+            document.getElementById('jsonCount').textContent = jsons;
+            renderReports(allReports);
+          } catch (e) { c.innerHTML = `<p class="text-red-400 text-sm py-4">Error: ${e.message}</p>`; }
+        }
+
+	        function renderReports(reports) {
+	          const c = document.getElementById('reportsContainer');
+	          if (!reports.length) {
+            c.innerHTML = `
+        <div class="text-center py-16">
+          <span class="material-symbols-outlined text-6xl text-[#30363d] block mb-3">description</span>
+          <p class="text-[#8b949e] font-medium">No reports found</p>
+          <p class="text-[#8b949e] text-sm mt-1">Run a scan and generate a report to see it here.</p>
+          <a href="Nmap.html" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#0078d4] text-white text-sm font-semibold">
+            <span class="material-symbols-outlined text-base">hub</span>Go to Scanner
+          </a>
+        </div>`;
+	            return;
+	          }
+	          const toolMeta = {
+	            nikto: { label: 'Nikto', cls: 'bg-red-500/10 text-red-400' },
+	            harvester: { label: 'Harvester', cls: 'bg-blue-500/10 text-blue-400' },
+	            nmap: { label: 'Nmap', cls: 'bg-green-500/10 text-green-400' },
+	            sqlmap: { label: 'SQLMap', cls: 'bg-orange-500/10 text-orange-400' },
+	            wfuzz: { label: 'Wfuzz', cls: 'bg-purple-500/10 text-purple-400' },
+	            unknown: { label: 'Unknown', cls: 'bg-gray-500/10 text-gray-400' }
+	          };
+	          c.innerHTML = '<div class="grid grid-cols-[1fr_auto_auto] gap-4 px-4 pb-2 text-[#8b949e] text-xs font-semibold uppercase"><span>Report</span><span>Tool</span><span>Status / Downloads</span></div><div class="space-y-3">' + reports.map(r => {
+	            const sb = STATUS[r.status] || STATUS.completed;
+	            const rb = SEV[r.risk_level] || SEV.info;
+	            const date = r.created_at ? new Date(r.created_at).toLocaleString() : '—';
+	            const owner = r.owner_id && role === 'admin' ? `<span class="text-[#8b949e] text-xs">User: ${r.owner_id.slice(0, 8)}…</span>` : '';
+	            const rawTool = String(r.tool || r.scan_type || r.type || 'unknown').toLowerCase();
+	            const normalizedTool = rawTool.includes('nikto') ? 'nikto' : rawTool.includes('harvester') ? 'harvester' : rawTool.includes('sql') ? 'sqlmap' : rawTool.includes('wfuzz') ? 'wfuzz' : rawTool.includes('nmap') || ['normal','medium','strong','quick'].includes(rawTool) ? 'nmap' : 'unknown';
+	            const tool = toolMeta[normalizedTool] || toolMeta.unknown;
+	            return `
+	      <div class="p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-[#0078d4]/30 transition-all">
+	        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-lg bg-[#0078d4]/10 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-[#0078d4]">shield</span>
+            </div>
+            <div class="min-w-0">
+              <p class="text-white font-semibold text-sm truncate">${r.target}</p>
+              <p class="text-[#8b949e] text-xs">${r.scan_type?.toUpperCase() || 'SCAN'} · ${date}</p>
+              ${owner}
+            </div>
+	          </div>
+	          <div class="flex items-center gap-2 flex-shrink-0 flex-wrap">
+	            <span class="text-[#8b949e] text-xs font-semibold uppercase">Tool</span>
+	            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${tool.cls}">${tool.label}</span>
+	            ${r.risk_level ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold ${rb}">${r.risk_level.toUpperCase()}</span>` : ''}
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${sb}">${r.status}</span>
+            ${r.has_json ? `<a href="${API_URL + r.downloads.json}" download class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#0078d4]/10 hover:bg-[#0078d4]/20 text-[#0078d4] text-xs font-semibold transition-colors"><span class="material-symbols-outlined text-sm">code</span>JSON</a>` : ''}
+            ${r.has_pdf ? `<a href="${API_URL + r.downloads.pdf}" download class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold transition-colors"><span class="material-symbols-outlined text-sm">picture_as_pdf</span>PDF</a>` : ''}
+            ${!r.has_pdf && !r.has_json ? `<button onclick="generateReport('${r.scan_id}')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-xs font-semibold transition-colors"><span class="material-symbols-outlined text-sm">auto_awesome</span>Generate</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+	          }).join('') + '</div>';
+        }
+
+        window.generateReport = async function (scanId) {
+          try {
+            const res = await fetch(`${API_URL}/api/reports/generate`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scan_id: scanId }) });
+            if (!res.ok) throw new Error('Server error ' + res.status);
+            const data = await res.json();
+            if (data.status === 'success') { loadReports(); }
+            else alert('Failed: ' + data.message);
+          } catch (e) { alert('Error: ' + e.message); }
+        };
+
+        // Filter
+        document.getElementById('searchReports').addEventListener('input', function () {
+          const q = this.value.toLowerCase();
+          renderReports(allReports.filter(r => r.target.toLowerCase().includes(q)));
+        });
+
+        // File upload
+        window.handleFileSelect = function (input) {
+          const f = input.files[0]; if (!f) return;
+          document.getElementById('fileName').textContent = f.name;
+          document.getElementById('fileSelected').classList.remove('hidden');
+          document.getElementById('uploadSubmitBtn').disabled = false;
+        };
+        window.clearFile = function () {
+          document.getElementById('fileInput').value = '';
+          document.getElementById('fileSelected').classList.add('hidden');
+          document.getElementById('uploadSubmitBtn').disabled = true;
+        };
+
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const fi = document.getElementById('fileInput');
+          if (!fi.files[0]) return;
+          const fd = new FormData(); fd.append('file', fi.files[0]);
+          const btn = document.getElementById('uploadSubmitBtn'); btn.disabled = true; btn.textContent = 'Uploading…';
+          const msg = document.getElementById('uploadMsg'); msg.classList.remove('hidden'); msg.className = 'mt-3 text-sm text-center text-[#8b949e]'; msg.textContent = 'Uploading…';
+          try {
+            const res = await fetch(`${API_URL}/api/reports/upload`, { method: 'POST', credentials: 'include', body: fd });
+            const data = await res.json();
+            if (data.status === 'success') {
+              msg.className = 'mt-3 text-sm text-center text-green-400'; msg.textContent = 'Uploaded: ' + data.filename;
+              clearFile(); btn.textContent = 'Upload Report'; btn.disabled = false;
+              setTimeout(() => { document.getElementById('uploadModal').classList.add('hidden'); msg.classList.add('hidden'); }, 2000);
+            } else { msg.className = 'mt-3 text-sm text-center text-red-400'; msg.textContent = 'Error: ' + data.message; btn.textContent = 'Upload Report'; btn.disabled = false; }
+          } catch (err) { msg.className = 'mt-3 text-sm text-center text-red-400'; msg.textContent = 'Error: ' + err.message; btn.textContent = 'Upload Report'; btn.disabled = false; }
+        });
+
+        // Drag & drop
+        const dz = document.getElementById('dropZone');
+        dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('border-[#0078d4]'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('border-[#0078d4]'));
+        dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('border-[#0078d4]'); const f = e.dataTransfer.files[0]; if (f) { document.getElementById('fileInput').files = e.dataTransfer.files; handleFileSelect(document.getElementById('fileInput')); } });
+
+
+        loadReports();
+      })();
+  </script>
+</body>
+
+</html>

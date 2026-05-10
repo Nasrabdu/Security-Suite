@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Ping Test - Security Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="js/auth-helper.js"></script>
+<style>
+body{font-family:'Inter',sans-serif}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass{background:rgba(22,27,34,.9);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(0,120,212,.4)}70%{box-shadow:0 0 0 12px rgba(0,120,212,0)}100%{box-shadow:0 0 0 0 rgba(0,120,212,0)}}
+.pulse-ring{animation:pulse-ring 1.5s ease-out infinite}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in-up{animation:fadeInUp .4s ease-out forwards}
+button:active,.btn:active,input[type="button"]:active,input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,button:focus-visible,.btn:focus,.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"#0078d4"}}}}</script>
+</head>
+<body class="bg-[#0d1117] text-[#e6edf3] min-h-screen dark">
+
+<!-- Sidebar -->
+<div class="fixed inset-y-0 left-0 w-64 bg-[#161b22] border-r border-[#30363d] flex flex-col z-30">
+  <div class="p-5 border-b border-[#30363d] flex items-center gap-3">
+    <div class="w-9 h-9 rounded-lg bg-[#0078d4] flex items-center justify-center"><span class="material-symbols-outlined text-white text-xl">shield</span></div>
+    <div><p class="font-bold text-sm text-white">Security Suite</p><p class="text-[#8b949e] text-xs">Pentest Platform</p></div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <a href="#" id="dashLink" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">dashboard</span>Dashboard</a>
+    <a href="Ping.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#0078d4] text-white font-semibold text-sm"><span class="material-symbols-outlined text-xl">wifi_tethering</span>Ping Test</a>
+    <a href="Nmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">hub</span>Nmap Scanner</a>
+    <a href="SQL.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">storage</span>SQL Scanner</a>
+    <a href="Wfuzz.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">wysiwyg</span>Wfuzz</a>
+    <a href="Harvester.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">travel_explore</span>Harvester</a>
+    <a href="Nikto.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">bug_report</span>Nikto</a>
+    <a href="Reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-[#8b949e] hover:text-white text-sm"><span class="material-symbols-outlined text-xl">description</span>Reports</a>
+  </nav>
+  <div class="p-4 border-t border-[#30363d]">
+    <p class="text-white text-sm font-medium mb-2" id="sidebarName">User</p>
+    <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-medium"><span class="material-symbols-outlined text-base">logout</span>Sign Out</button>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="ml-64 min-h-screen">
+  <header class="sticky top-0 z-20 bg-[#0d1117]/80 backdrop-blur border-b border-[#30363d] px-8 py-4">
+    <h1 class="text-xl font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-[#0078d4]">wifi_tethering</span>Ping Test</h1>
+    <p class="text-[#8b949e] text-sm">Check target connectivity before running any scan tool</p>
+  </header>
+
+  <main class="p-8 max-w-4xl space-y-5">
+
+    <!-- Info Banner -->
+    <div class="glass rounded-2xl p-6 border border-[#0078d4]/30">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-xl bg-[#0078d4]/15 flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-[#0078d4] text-2xl">info</span>
+        </div>
+        <div>
+          <h2 class="font-bold text-white mb-1">Why Ping First?</h2>
+          <p class="text-[#8b949e] text-sm leading-relaxed">Before running any security scan, verify that your target is reachable. Enter a URL, domain, or the DVWA lab address to check connectivity. Once confirmed, proceed to any scanning tool.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DVWA Quick Target -->
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs font-bold">!</div>
+        <h2 class="font-bold text-white">DVWA Lab Environment</h2>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-500/15 text-orange-400">Recommended</span>
+      </div>
+      <p class="text-[#8b949e] text-sm mb-4">Use the DVWA (Damn Vulnerable Web Application) container as your legal testing target. It's included in the Docker setup.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button onclick="setTarget('dvwa')" class="flex items-center gap-3 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-orange-500/50 transition-all group cursor-pointer">
+          <div class="w-10 h-10 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-orange-400">dns</span>
+          </div>
+          <div>
+            <p class="text-white font-semibold text-sm group-hover:text-orange-400 transition-colors">dvwa (Docker)</p>
+            <p class="text-[#8b949e] text-xs">Internal Docker container name</p>
+          </div>
+        </button>
+        <button onclick="setTarget('localhost:8080')" class="flex items-center gap-3 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-[#0078d4]/50 transition-all group cursor-pointer">
+          <div class="w-10 h-10 rounded-lg bg-[#0078d4]/15 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-[#0078d4]">computer</span>
+          </div>
+          <div>
+            <p class="text-white font-semibold text-sm group-hover:text-[#0078d4] transition-colors">localhost:8080</p>
+            <p class="text-[#8b949e] text-xs">Access from host machine</p>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Ping Input -->
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-7 h-7 rounded-full bg-[#0078d4] flex items-center justify-center text-white text-xs font-bold">1</div>
+        <h2 class="font-bold text-white">Enter Target</h2>
+        <span class="text-[#8b949e] text-xs ml-1">(domain, URL, or IP address)</span>
+      </div>
+      <div class="flex gap-3 flex-wrap">
+        <div class="flex-1 relative min-w-48">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#8b949e]">language</span>
+          <input id="targetInput" type="text" placeholder="dvwa  or  example.com  or  192.168.1.1"
+            class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-[#0d1117] border border-[#30363d] text-white placeholder-[#8b949e] focus:outline-none focus:border-[#0078d4] text-sm"
+            autocomplete="off"/>
+        </div>
+        <button id="pingBtn" class="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#0078d4] hover:bg-[#0063b1] text-white font-semibold text-sm transition-all active:scale-95">
+          <span class="material-symbols-outlined">wifi_tethering</span>Ping
+        </button>
+      </div>
+
+      <!-- Ping Result -->
+      <div id="pingResult" class="hidden mt-4 p-4 rounded-xl border"></div>
+    </div>
+
+    <!-- Ping History -->
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="material-symbols-outlined text-[#8b949e]">history</span>
+        <h2 class="font-bold text-white">Ping History</h2>
+        <span class="ml-auto text-[#8b949e] text-xs">This session only</span>
+      </div>
+      <div id="pingHistory">
+        <p class="text-[#8b949e] text-sm py-2">No pings yet. Enter a target above.</p>
+      </div>
+    </div>
+
+    <!-- Quick Nav to Tools -->
+    <div class="glass rounded-2xl p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="material-symbols-outlined text-[#0078d4]">rocket_launch</span>
+        <h2 class="font-bold text-white">Ready to Scan?</h2>
+      </div>
+      <p class="text-[#8b949e] text-sm mb-4">Once your target is reachable, proceed to any scan tool:</p>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <a href="Nmap.html" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-[#0078d4]/50 transition-all group">
+          <span class="material-symbols-outlined text-[#8b949e] group-hover:text-[#0078d4] text-2xl transition-colors">hub</span>
+          <span class="text-white text-xs font-semibold group-hover:text-[#0078d4]">Nmap</span>
+        </a>
+        <a href="SQL.html" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-orange-500/50 transition-all group">
+          <span class="material-symbols-outlined text-[#8b949e] group-hover:text-orange-400 text-2xl transition-colors">storage</span>
+          <span class="text-white text-xs font-semibold group-hover:text-orange-400">SQLMap</span>
+        </a>
+        <a href="Wfuzz.html" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-purple-500/50 transition-all group">
+          <span class="material-symbols-outlined text-[#8b949e] group-hover:text-purple-400 text-2xl transition-colors">wysiwyg</span>
+          <span class="text-white text-xs font-semibold group-hover:text-purple-400">Wfuzz</span>
+        </a>
+        <a href="Harvester.html" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-green-500/50 transition-all group">
+          <span class="material-symbols-outlined text-[#8b949e] group-hover:text-green-400 text-2xl transition-colors">travel_explore</span>
+          <span class="text-white text-xs font-semibold group-hover:text-green-400">Harvester</span>
+        </a>
+        <a href="Nikto.html" class="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-red-500/50 transition-all group">
+          <span class="material-symbols-outlined text-[#8b949e] group-hover:text-red-400 text-2xl transition-colors">bug_report</span>
+          <span class="text-white text-xs font-semibold group-hover:text-red-400">Nikto</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const auth=checkAuth();
+  if(!auth)return;
+  const user=getUser();
+  document.getElementById('dashLink').href=user.role==='admin'?'Dashbord.html':'UserDashboard.html';
+  document.getElementById('sidebarName').textContent=user.name||'User';
+
+  let pingHistoryList=[];
+
+  window.setTarget=function(target){
+    document.getElementById('targetInput').value=target;
+    document.getElementById('pingResult').classList.add('hidden');
+  };
+
+  function normalize(raw){
+    raw=raw.trim().replace(/^https?:\/\//i,'');
+    raw=raw.split('/')[0].split('?')[0].split('#')[0];
+    if(!raw.match(/\[.*\]/))raw=raw.split(':')[0];
+    return raw.trim();
+  }
+
+  function showPing(ok,d,msg,state){
+    const b=document.getElementById('pingResult');b.classList.remove('hidden');
+    if(state==='load'){
+      b.className='mt-4 p-4 rounded-xl border border-[#30363d] bg-[#0d1117] text-[#8b949e] text-sm flex gap-2';
+      b.innerHTML=`<span class="material-symbols-outlined spin">sync</span>${msg}`;
+      return;
+    }
+    if(ok){
+      b.className='mt-4 p-4 rounded-xl border border-green-500/30 bg-green-500/5 fade-in-up';
+      const ip=d?.ip_address||'';const lat=d?.latency_ms!=null?d.latency_ms+'ms':'N/A';
+      const loss=d?.packet_loss!=null?d.packet_loss+'%':'N/A';
+      b.innerHTML=`
+        <p class="text-green-400 font-semibold text-sm mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-base">check_circle</span>${msg}</p>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="p-3 rounded-lg bg-green-500/5 border border-green-500/20 text-center">
+            <p class="text-green-400 font-bold text-lg">${ip||'—'}</p>
+            <p class="text-[#8b949e] text-xs">IP Address</p>
+          </div>
+          <div class="p-3 rounded-lg bg-green-500/5 border border-green-500/20 text-center">
+            <p class="text-green-400 font-bold text-lg">${lat}</p>
+            <p class="text-[#8b949e] text-xs">Latency</p>
+          </div>
+          <div class="p-3 rounded-lg bg-green-500/5 border border-green-500/20 text-center">
+            <p class="text-green-400 font-bold text-lg">${loss}</p>
+            <p class="text-[#8b949e] text-xs">Packet Loss</p>
+          </div>
+        </div>
+        <p class="text-green-400/70 text-xs mt-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm">check</span>Target is reachable — you can now proceed to any scan tool.</p>`;
+    }else{
+      b.className='mt-4 p-4 rounded-xl border border-red-500/30 bg-red-500/5 fade-in-up';
+      b.innerHTML=`<p class="text-red-400 font-semibold text-sm flex items-center gap-1"><span class="material-symbols-outlined text-base">cancel</span>${msg||'Unreachable'}</p>
+      <p class="text-[#8b949e] text-xs mt-1">Target unreachable. Check the address and try again.</p>`;
+    }
+  }
+
+  function addToHistory(target,ok,ip,latency){
+    pingHistoryList.unshift({target,ok,ip,latency,time:new Date()});
+    if(pingHistoryList.length>10)pingHistoryList.pop();
+    renderHistory();
+  }
+
+  function renderHistory(){
+    const c=document.getElementById('pingHistory');
+    if(!pingHistoryList.length){c.innerHTML='<p class="text-[#8b949e] text-sm py-2">No pings yet.</p>';return;}
+    c.innerHTML='<div class="space-y-2">'+pingHistoryList.map(h=>{
+      const time=h.time.toLocaleTimeString();
+      const cls=h.ok?'border-green-500/20 bg-green-500/5':'border-red-500/20 bg-red-500/5';
+      const icon=h.ok?'check_circle':'cancel';
+      const iconCls=h.ok?'text-green-400':'text-red-400';
+      return `<div class="flex items-center gap-3 p-3 rounded-xl border ${cls}">
+        <span class="material-symbols-outlined ${iconCls} text-lg">${icon}</span>
+        <div class="flex-1">
+          <p class="text-white text-sm font-medium">${h.target}</p>
+          <p class="text-[#8b949e] text-xs">${h.ip?'IP: '+h.ip+' · ':''}${h.latency?h.latency+'ms':''}${h.ok?'':'Unreachable'}</p>
+        </div>
+        <span class="text-[#8b949e] text-xs">${time}</span>
+      </div>`;
+    }).join('')+'</div>';
+  }
+
+  // PING
+  document.getElementById('pingBtn').addEventListener('click',async function(){
+    const raw=document.getElementById('targetInput').value.trim();
+    if(!raw){showPing(false,null,'Enter a target first');return;}
+    const target=normalize(raw);
+    document.getElementById('targetInput').value=target;
+    this.disabled=true;
+    this.innerHTML='<span class="material-symbols-outlined spin">sync</span>Pinging…';
+    showPing(null,null,'Checking connectivity to '+target+'…','load');
+    try{
+      const r=await fetch(`${API_URL}/api/ping`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({target})});
+      const d=await r.json();
+      if(d.status==='error'){showPing(false,null,d.message);addToHistory(target,false);}
+      else{
+        showPing(d.reachable,d,d.message);
+        addToHistory(target,d.reachable,d.ip_address,d.latency_ms);
+      }
+    }catch(e){showPing(false,null,'Backend error: '+e.message);addToHistory(target,false);}
+    this.disabled=false;
+    this.innerHTML='<span class="material-symbols-outlined">wifi_tethering</span>Ping';
+  });
+
+  // Enter key
+  document.getElementById('targetInput').addEventListener('keydown',function(e){
+    if(e.key==='Enter'){e.preventDefault();document.getElementById('pingBtn').click();}
+  });
+
+  document.getElementById('targetInput').addEventListener('input',function(){
+    document.getElementById('pingResult').classList.add('hidden');
+  });
+})();
+</script>
+</body></html>

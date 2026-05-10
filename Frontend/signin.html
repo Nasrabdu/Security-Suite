@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Sign In - Security Suite</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="js/auth-helper.js"></script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Animated gradient background */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0a0e27, #1a1f3a, #0d1b2a, #1b263b);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(26, 32, 44, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 123, 255, 0.1);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Input focus glow */
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+        }
+    button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007BFF",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#121212",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1A202C",
+                        "text-light": "#121212",
+                        "text-dark": "#e0e0e0",
+                        "text-muted-light": "#6b7280",
+                        "text-muted-dark": "#9ca3af"
+                    },
+                    fontFamily: { "display": ["Inter", "sans-serif"] },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="font-display gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+
+        <!-- Left Side - Branding & Info -->
+        <div class="hidden lg:block text-text-dark space-y-6 float-animation">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="size-16 text-primary">
+                    <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-4xl font-black tracking-tight">Security Suite</h1>
+                    <p class="text-text-muted-dark text-lg">Advanced Security Testing Platform</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-white/5 backdrop-blur-sm">
+                    <div class="flex items-center justify-center rounded-full bg-primary/20 size-12 flex-shrink-0">
+                        <span class="material-symbols-outlined text-primary text-2xl">security</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Comprehensive Security Testing</h3>
+                        <p class="text-text-muted-dark text-sm">Access powerful tools like Nmap, Nikto, SQLMap, Wfuzz, and theHarvester in one unified platform.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-white/5 backdrop-blur-sm">
+                    <div class="flex items-center justify-center rounded-full bg-green-500/20 size-12 flex-shrink-0">
+                        <span class="material-symbols-outlined text-green-500 text-2xl">speed</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Fast & Efficient</h3>
+                        <p class="text-text-muted-dark text-sm">Streamlined workflows and automated scanning to save
+                            time and improve accuracy.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 rounded-lg bg-white/5 backdrop-blur-sm">
+                    <div class="flex items-center justify-center rounded-full bg-orange-500/20 size-12 flex-shrink-0">
+                        <span class="material-symbols-outlined text-orange-500 text-2xl">analytics</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Detailed Reports</h3>
+                        <p class="text-text-muted-dark text-sm">Generate comprehensive security reports with actionable
+                            insights and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Sign In Form -->
+        <div class="glass-card rounded-2xl p-8 md:p-10 w-full">
+            <div class="mb-8">
+                <h2 class="text-text-dark text-3xl font-black mb-2">Welcome Back</h2>
+                <p class="text-text-muted-dark">Sign in to access your security dashboard</p>
+            </div>
+
+            <form id="signinForm" class="space-y-6">
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-text-dark text-sm font-medium mb-2">
+                        Email Address
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-dark">email</span>
+                        <input type="email" id="email" name="email" required
+                            class="input-glow w-full pl-12 pr-4 py-3 bg-background-dark border border-white/20 rounded-lg text-text-dark placeholder:text-text-muted-dark focus:outline-none focus:border-primary transition-all"
+                            placeholder="you@example.com" />
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="password" class="block text-text-dark text-sm font-medium mb-2">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-dark">lock</span>
+                        <input type="password" id="password" name="password" required
+                            class="input-glow w-full pl-12 pr-12 py-3 bg-background-dark border border-white/20 rounded-lg text-text-dark placeholder:text-text-muted-dark focus:outline-none focus:border-primary transition-all"
+                            placeholder="••••••••" />
+                        <button type="button" id="togglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-dark hover:text-text-dark transition-colors">
+                            <span class="material-symbols-outlined">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="remember"
+                            class="form-checkbox rounded text-primary focus:ring-primary focus:ring-2 bg-background-dark border-white/20">
+                        <span class="text-text-dark text-sm">Remember me</span>
+                    </label>
+                    <a href="#" class="text-primary text-sm font-medium hover:underline">Forgot password?</a>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage"
+                    class="hidden p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">error</span>
+                    <span id="errorText"></span>
+                </div>
+
+                <!-- Registration Success Message -->
+                <div id="registeredMessage"
+                    class="hidden p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    <span>Account created successfully! Please sign in.</span>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage"
+                    class="hidden p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    <span>Sign in successful! Redirecting...</span>
+                </div>
+
+                <!-- Sign In Button -->
+                <button type="submit" id="signinBtn"
+                    class="w-full py-3 px-6 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span id="btnText">Sign In</span>
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+
+                <!-- Sign Up Link -->
+                <div class="text-center pt-4 border-t border-white/10">
+                    <p class="text-text-muted-dark text-sm">
+                        Don't have an account?
+                        <a href="Register.html" class="text-primary font-medium hover:underline">Sign up</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+            (function () {
+                const form = document.getElementById('signinForm');
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                const togglePasswordBtn = document.getElementById('togglePassword');
+                const errorMessage = document.getElementById('errorMessage');
+                const successMessage = document.getElementById('successMessage');
+                const errorText = document.getElementById('errorText');
+                const signinBtn = document.getElementById('signinBtn');
+                const btnText = document.getElementById('btnText');
+
+                // Toggle password visibility
+                togglePasswordBtn.addEventListener('click', function () {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+
+                    const icon = this.querySelector('.material-symbols-outlined');
+                    icon.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+                });
+
+                // Form submission with real API
+                form.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    // Hide previous messages
+                    errorMessage.classList.add('hidden');
+                    successMessage.classList.add('hidden');
+
+                    const email = emailInput.value.trim().toLowerCase();
+                    const password = passwordInput.value;
+                    const remember = document.getElementById('remember').checked;
+
+                    // Validate inputs
+                    if (!email || !password) {
+                        showError('Please fill in all fields');
+                        return;
+                    }
+
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        showError('Please enter a valid email address');
+                        return;
+                    }
+
+                    // Show loading state
+                    signinBtn.disabled = true;
+                    btnText.textContent = 'Signing in...';
+
+                    try {
+                        // Call real backend API
+                        const response = await fetch(`${API_URL}/api/auth/login`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({ email, password })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.status === 'success') {
+                            // Success! Store user info in sessionStorage
+                            sessionStorage.setItem('user_id', data.user.user_id);
+                            sessionStorage.setItem('user_email', data.user.email);
+                            sessionStorage.setItem('user_name', data.user.name);
+                            sessionStorage.setItem('user_role', data.user.role);
+
+                            // Also store in localStorage if remember me is checked
+                            if (remember) {
+                                localStorage.setItem('remember_email', email);
+                            }
+
+                            // Show success message
+                            successMessage.classList.remove('hidden');
+
+                            // Role-based redirect
+                            setTimeout(() => {
+                                if (data.user.role === 'admin') {
+                                    window.location.href = 'Dashbord.html';
+                                } else {
+                                    window.location.href = 'UserDashboard.html';
+                                }
+                            }, 1000);
+                        } else {
+                            // Show error from backend
+                            showError(data.message || 'Invalid email or password');
+                            signinBtn.disabled = false;
+                            btnText.textContent = 'Sign In';
+                        }
+                    } catch (error) {
+                        // Network error
+                        showError('Cannot connect to server. Please ensure the backend is running.');
+                        signinBtn.disabled = false;
+                        btnText.textContent = 'Sign In';
+                    }
+                });
+
+                function showError(message) {
+                    errorText.textContent = message;
+                    errorMessage.classList.remove('hidden');
+                }
+
+                // Show registration success banner if redirected from Register.html
+                if (new URLSearchParams(window.location.search).get('registered') === 'true') {
+                    document.getElementById('registeredMessage').classList.remove('hidden');
+                    // Pre-fill email if stored
+                    const preEmail = sessionStorage.getItem('register_email');
+                    if (preEmail) { emailInput.value = preEmail; sessionStorage.removeItem('register_email'); }
+                }
+
+                // Check if already logged in
+                if (sessionStorage.getItem('user_id')) {
+                    // Already logged in, redirect to correct dashboard based on role
+                    const role = sessionStorage.getItem('user_role');
+                    window.location.href = role === 'admin' ? 'Dashbord.html' : 'UserDashboard.html';
+                }
+            })();
+    </script>
+</body>
+
+</html>

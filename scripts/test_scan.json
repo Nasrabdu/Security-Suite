@@ -1,0 +1,50 @@
+{
+  "scan_metadata": {
+    "target": "scanme.nmap.org",
+    "target_host": "scanme.nmap.org",
+    "scan_date": "2026-02-15T18:52:45.221313Z",
+    "scanner": "nmap",
+    "version": "7.95 ( https://nmap.org )"
+  },
+  "results": {
+    "quick": {
+      "parsed": true,
+      "hosts": [
+        {
+          "status": "up",
+          "addresses": [
+            {
+              "addr": "45.33.32.156",
+              "type": "ipv4"
+            }
+          ],
+          "hostnames": [
+            "scanme.nmap.org",
+            "scanme.nmap.org"
+          ],
+          "ports": [],
+          "services": [],
+          "os": null
+        }
+      ],
+      "ports": [],
+      "services": [],
+      "os_detection": null,
+      "vulnerabilities": [],
+      "duration": 6.713027,
+      "status": "completed",
+      "command": "nmap -T4 -F -oX - scanme.nmap.org"
+    }
+  },
+  "vulnerabilities": [],
+  "summary": {
+    "total_vulnerabilities": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 0,
+    "owasp_breakdown": {},
+    "nvd_breakdown": {}
+  }
+}

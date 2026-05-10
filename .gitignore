@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.template
+*.db
+*.sqlite
+*.sqlite3
+cookies.txt
+debug_scan.py
+test_scan.py
+test_scans.py
+test_ping.py
+__pycache__/
+*.pyc
+pentest-platform/backend/data/
+pentest-platform/backend/venv/
+.vscode/

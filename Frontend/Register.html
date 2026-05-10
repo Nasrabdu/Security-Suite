@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>Register - Security Suite</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="js/auth-helper.js"></script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Animated gradient background */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0a0e27, #1a1f3a, #0d1b2a, #1b263b);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(26, 32, 44, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 123, 255, 0.1);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Input glow effect */
+        .input-glow:focus {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Button glow effect */
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+        }
+
+        /* Password strength bar */
+        .password-strength {
+            height: 4px;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+    button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active{background:#1f2937!important;color:#f9fafb!important;border-color:#111827!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)!important;transform:translateY(1px)}
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible{outline:2px solid #334155!important;outline-offset:2px;box-shadow:0 0 0 3px rgba(51,65,85,.35)!important}
+</style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        'background-dark': '#0f172a',
+                        'text-dark': '#f1f5f9',
+                        'text-muted-dark': '#94a3b8'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4 font-['Inter']">
+    <div class="w-full max-w-md">
+        <!-- Logo/Header -->
+        <div class="text-center mb-8 float-animation">
+            <div class="inline-block p-4 rounded-full bg-primary/10 mb-4">
+                <span class="material-symbols-outlined text-5xl text-primary">shield</span>
+            </div>
+            <h1 class="text-4xl font-black text-text-dark mb-2">
+                Security Suite
+            </h1>
+            <p class="text-text-muted-dark">Create your pentesting account</p>
+        </div>
+
+        <!-- Registration Card -->
+        <div class="glass-card rounded-2xl p-8 shadow-2xl">
+            <h2 class="text-2xl font-bold text-text-dark mb-6">Create Account</h2>
+
+            <form id="registerForm" class="space-y-6">
+                <!-- Name Input -->
+                <div>
+                    <label for="name" class="block text-text-dark text-sm font-medium mb-2">
+                        Full Name
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-dark">person</span>
+                        <input type="text" id="name" name="name" required
+                            class="input-glow w-full pl-12 pr-4 py-3 bg-background-dark border border-white/20 rounded-lg text-text-dark placeholder:text-text-muted-dark focus:outline-none focus:border-primary transition-all"
+                            placeholder="John Doe" />
+                    </div>
+                </div>
+
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-text-dark text-sm font-medium mb-2">
+                        Email Address
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-dark">email</span>
+                        <input type="email" id="email" name="email" required
+                            class="input-glow w-full pl-12 pr-4 py-3 bg-background-dark border border-white/20 rounded-lg text-text-dark placeholder:text-text-muted-dark focus:outline-none focus:border-primary transition-all"
+                            placeholder="you@example.com" />
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="password" class="block text-text-dark text-sm font-medium mb-2">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-dark">lock</span>
+                        <input type="password" id="password" name="password" required
+                            class="input-glow w-full pl-12 pr-12 py-3 bg-background-dark border border-white/20 rounded-lg text-text-dark placeholder:text-text-muted-dark focus:outline-none focus:border-primary transition-all"
+                            placeholder="••••••••" />
+                        <button type="button" id="togglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-dark hover:text-text-dark transition-colors">
+                            <span class="material-symbols-outlined">visibility</span>
+                        </button>
+                    </div>
+                    <!-- Password Strength Indicator -->
+                    <div class="mt-2">
+                        <div class="password-strength bg-gray-700" id="strengthBar"></div>
+                        <p class="text-xs text-text-muted-dark mt-1" id="strengthText"></p>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage"
+                    class="hidden p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">error</span>
+                    <span id="errorText"></span>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage"
+                    class="hidden p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    <span>Registration successful! Redirecting to login...</span>
+                </div>
+
+                <!-- Register Button -->
+                <button type="submit" id="registerBtn"
+                    class="btn-glow w-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold py-3 rounded-lg hover:from-blue-600 hover:to-primary transition-all duration-300 flex items-center justify-center gap-2">
+                    <span id="btnText">Create Account</span>
+                    <span class="material-symbols-outlined">person_add</span>
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="text-center pt-6 border-t border-white/10 mt-6">
+                <p class="text-text-muted-dark text-sm">
+                    Already have an account?
+                    <a href="signin.html" class="text-primary font-medium hover:underline">
+                        Sign in here
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 text-text-muted-dark text-sm">
+            <p>© 2026 Security Suite. Built for security professionals.</p>
+        </div>
+    </div>
+
+    <script>
+            (function () {
+                const form = document.getElementById('registerForm');
+                const nameInput = document.getElementById('name');
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                const togglePasswordBtn = document.getElementById('togglePassword');
+                const errorMessage = document.getElementById('errorMessage');
+                const errorText = document.getElementById('errorText');
+                const successMessage = document.getElementById('successMessage');
+                const registerBtn = document.getElementById('registerBtn');
+                const btnText = document.getElementById('btnText');
+                const strengthBar = document.getElementById('strengthBar');
+                const strengthText = document.getElementById('strengthText');
+
+                // Toggle password visibility
+                togglePasswordBtn.addEventListener('click', function () {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+
+                    const icon = this.querySelector('.material-symbols-outlined');
+                    icon.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+                });
+
+                // Password strength checker
+                passwordInput.addEventListener('input', function () {
+                    const password = this.value;
+
+                    let strength = 0;
+                    if (password.length >= 8) strength++;
+                    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+                    if (password.match(/[0-9]/)) strength++;
+                    if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+                    const colors = ['#ef4444', '#f59e0b', '#eab308', '#22c55e'];
+                    const widths = ['25%', '50%', '75%', '100%'];
+                    const texts = ['Weak', 'Fair', 'Good', 'Strong'];
+
+                    if (password.length > 0) {
+                        strengthBar.style.width = widths[strength - 1] || '25%';
+                        strengthBar.style.backgroundColor = colors[strength - 1] || '#ef4444';
+                        strengthText.textContent = texts[strength - 1] || 'Weak';
+                    } else {
+                        strengthBar.style.width = '0%';
+                        strengthText.textContent = '';
+                    }
+                });
+
+                // Form submission
+                form.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    // Hide previous messages
+                    errorMessage.classList.add('hidden');
+                    successMessage.classList.add('hidden');
+
+                    const name = nameInput.value.trim();
+                    const email = emailInput.value.trim().toLowerCase();
+                    const password = passwordInput.value;
+
+                    // Validate inputs
+                    if (!name || !email || !password) {
+                        showError('Please fill in all fields');
+                        return;
+                    }
+
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        showError('Please enter a valid email address');
+                        return;
+                    }
+
+                    // Password validation
+                    if (password.length < 8) {
+                        showError('Password must be at least 8 characters');
+                        return;
+                    }
+
+                    // Show loading state
+                    registerBtn.disabled = true;
+                    btnText.textContent = 'Creating account...';
+
+                    try {
+                        const response = await fetch(`${API_URL}/api/auth/register`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name, email, password })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.status === 'success') {
+                            // Success! Show message and redirect
+                            successMessage.classList.remove('hidden');
+                            btnText.textContent = 'Success!';
+
+                            // Store email so signin can pre-fill it
+                            sessionStorage.setItem('register_email', email);
+                            setTimeout(() => {
+                                window.location.href = 'signin.html?registered=true';
+                            }, 1500);
+                        } else {
+                            // Show error
+                            showError(data.message || 'Registration failed');
+                            registerBtn.disabled = false;
+                            btnText.textContent = 'Create Account';
+                        }
+                    } catch (error) {
+                        showError('Cannot connect to server. Please ensure the backend is running.');
+                        registerBtn.disabled = false;
+                        btnText.textContent = 'Create Account';
+                    }
+                });
+
+                function showError(message) {
+                    errorText.textContent = message;
+                    errorMessage.classList.remove('hidden');
+                }
+
+                if (sessionStorage.getItem('user_id')) {
+                    const role = sessionStorage.getItem('user_role');
+                    window.location.href = role === 'admin' ? 'Dashbord.html' : 'UserDashboard.html';
+                }
+            })();
+    </script>
+</body>
+
+</html>
