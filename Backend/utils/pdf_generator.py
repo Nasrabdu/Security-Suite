@@ -30,15 +30,15 @@ AMIRI_BOLD = os.path.join(FONT_DIR, 'Amiri-Bold.ttf')
 def download_font():
     """Download Amiri font if it doesn't exist."""
     os.makedirs(FONT_DIR, exist_ok=True)
-    if not os.path.exists(AMIRI_REG):
-        print("Downloading Amiri font...")
-        try:
-            # Using Google Fonts raw github link which is very stable
-            url = "https://github.com/google/fonts/raw/main/ofl/amiri/Amiri-Regular.ttf"
-            urllib.request.urlretrieve(url, AMIRI_REG)
-            print("Font downloaded successfully.")
-        except Exception as e:
-            print(f"Warning: Failed to download font: {e}")
+    try:
+        if not os.path.exists(AMIRI_REG):
+            url_reg = "https://github.com/google/fonts/raw/main/ofl/amiri/Amiri-Regular.ttf"
+            urllib.request.urlretrieve(url_reg, AMIRI_REG)
+        if not os.path.exists(AMIRI_BOLD):
+            url_bold = "https://github.com/google/fonts/raw/main/ofl/amiri/Amiri-Bold.ttf"
+            urllib.request.urlretrieve(url_bold, AMIRI_BOLD)
+    except Exception as e:
+        print(f"Warning: Failed to download font: {e}")
 
 try:
     download_font()

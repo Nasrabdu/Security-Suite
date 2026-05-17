@@ -20,16 +20,15 @@ services:
       - pentest_net
     depends_on:
       - db
-    environment:
-      - DATABASE_URL=postgresql://pentest_user:strongpassword@db:5432/pentest_db
-      - GEMINI_API_KEY=AIzaSyCOFOX5Yrancch1QWEL3BSlyHTE5ktiqoA
+    env_file:
+      - .env
 
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: pentest_db
-      POSTGRES_USER: pentest_user
-      POSTGRES_PASSWORD: strongpassword
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -40,8 +39,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@pentest.local
-      PGADMIN_DEFAULT_PASSWORD: Admin123
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "5050:80"
     networks:
@@ -89,5 +88,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./Frontend:/usr/share/nginx/html:ro
     networks:
       - pentest_net

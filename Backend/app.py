@@ -1813,6 +1813,11 @@ def health():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+    
+    # Initialize database tables
+    print("Initializing database tables...")
+    init_db()
+
     print(f"\n{'='*55}")
     print(f"  🛡  Security Suite Pentest Platform v3.0")
     print(f"  Backend running at http://localhost:{port}")

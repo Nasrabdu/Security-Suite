@@ -1,16 +1,55 @@
+# ============================================================
+# Security Suite - .gitignore
+# ============================================================
+
+# --- Environment Files (NEVER COMMIT) ---
 .env
 .env.*
+!.env.example
 !.env.template
+
+# --- Database Files ---
 *.db
 *.sqlite
 *.sqlite3
-cookies.txt
-debug_scan.py
-test_scan.py
-test_scans.py
-test_ping.py
+
+# --- Python Cache ---
 __pycache__/
 *.pyc
-pentest-platform/backend/data/
-pentest-platform/backend/venv/
+*.pyo
+*.pyd
+.Python
+
+# --- Python Virtual Environment ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- Test Files ---
+cookies.txt
+debug_scan.py
+test_scans.py
+
+# --- Scan Data & Reports (user-generated) ---
+Backend/data/scans/
+reports/
+*.json.bak
+
+# --- IDE & Editor ---
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS Generated ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Node Modules (if any) ---
+node_modules/
+
+# --- Logs ---
+*.log
+logs/

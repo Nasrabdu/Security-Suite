@@ -59,3 +59,24 @@ def run_wfuzz(
         return {'found_paths': [], 'raw_output': 'Scan exceeded timeout (180s)'}
     except Exception as e:
         return {'found_paths': [], 'raw_output': str(e)}
+
+if __name__ == '__main__':
+    import argparse
+    import json
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("target")
+    parser.add_argument("wordlist")
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+
+    # Map simple names to dirb wordlists
+    wordlist_path = '/usr/share/wordlists/dirb/common.txt'
+    if args.wordlist == 'big':
+        wordlist_path = '/usr/share/wordlists/dirb/big.txt'
+    elif args.wordlist == 'small':
+        wordlist_path = '/usr/share/wordlists/dirb/small.txt'
+
+    results = run_wfuzz(args.target, wordlist_path)
+    with open(args.output, 'w') as f:
+        json.dump(results, f, indent=2)
